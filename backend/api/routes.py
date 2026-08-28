@@ -43,6 +43,19 @@ async def upload_bid(
         file_size=len(contents),
         document=contents,
     )
+    
+    # Safely inject into Neo4j graph without blocking
+    try:
+        from backend.services.graph_service import graph_rag
+        if graph_rag.driver:
+            with graph_rag.driver.session() as session:
+                session.run(
+                    "CREATE (r:RFP {id: $id, title: $title, uploaded_at: timestamp()}) "
+                    "WITH r MATCH (m:Policy) MERGE (r)-[:EVALUATING]->(m)",
+                    id=str(bid.bid_id), title=bid.rfp.title
+                )
+    except Exception as e:
+        print(f"Graph Neo4j bypass on upload: {e}")
     return UploadResponse(
         bid_id=bid.bid_id,
         filename=bid.rfp.filename,
