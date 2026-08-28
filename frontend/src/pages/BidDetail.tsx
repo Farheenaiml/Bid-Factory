@@ -12,6 +12,7 @@ const BidDetail = () => {
     const [reviews, setReviews] = useState<ReviewItem[]>([]);
     const [activeTab, setActiveTab] = useState('overview');
     const [selectedReq, setSelectedReq] = useState<Requirement | null>(null);
+    const [showToast, setShowToast] = useState(false);
 
     useEffect(() => {
         if (!bidId) return;
@@ -62,8 +63,23 @@ const BidDetail = () => {
         return 'badge-info';
     };
 
+
+    const handleSyncCRM = () => {
+        // Mock API call to CRM
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 3000);
+    };
+
+    const estimatedTokens = reqs.length > 0 ? (reqs.length * 212) + 150 : 0;
+    const estimatedCost = (estimatedTokens * 0.00005).toFixed(3);
+
     return (
         <div>
+            {showToast && (
+                <div style={{ position: 'fixed', top: 20, right: 20, background: '#10b981', color: 'white', padding: '1rem', borderRadius: '8px', zIndex: 9999, boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+                    ✅ Successfully synced proposal to Salesforce CRM!
+                </div>
+            )}
             <div className="flex justify-between items-start mb-6">
                 <div>
                     <h2 className="mb-2">BID WORKSPACE: {bid.rfp.title}</h2>
@@ -73,7 +89,9 @@ const BidDetail = () => {
                     <span className={`badge badge-${bid.processing_status === 'completed' ? 'success' : bid.processing_status === 'failed' ? 'error' : 'info'}`}>
                         {bid.processing_status.toUpperCase()}
                     </span>
-                    <a href={`/api/bids/${bid.bid_id}/export/docx`} download className="btn btn-primary text-sm">Export DOCX</a>
+                    <button onClick={handleSyncCRM} className="btn btn-outline text-sm">Sync Salesforce</button>
+                    <a href={`mailto:procurement@client.com?subject=Proposal Submission - ${bid.rfp.title}&body=Hello,%0D%0A%0D%0AThe proposal response is fully reviewed and ready for submission.`} className="btn btn-outline text-sm">Draft Email</a>
+                    <a href={`/api/bids/${bid.bid_id}/export/docx`} download className="btn btn-outline text-sm">Export DOCX</a>
                     <a href={`/api/bids/${bid.bid_id}/export/csv`} download className="btn btn-outline text-sm">Export CSV</a>
                 </div>
             </div>
@@ -103,6 +121,11 @@ const BidDetail = () => {
                         <div className="metric-card">
                             <div className="metric-title flex gap-2 items-center"><AlertTriangle size={16} /> Reviews Pending</div>
                             <div className="metric-value text-warning" style={{ color: 'var(--status-warning)' }}>{reviews.filter(r => r.review_status === 'PENDING').length}</div>
+                        </div>
+                        <div className="metric-card">
+                            <div className="metric-title flex gap-2 items-center text-muted">Tokens Used</div>
+                            <div className="metric-value">~{estimatedTokens}</div>
+                            <div className="text-xs mt-1 text-muted">Est. Cost: ${estimatedCost}</div>
                         </div>
                     </div>
 

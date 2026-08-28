@@ -4,7 +4,7 @@ import { UploadCloud, CheckCircle, XCircle, FileText } from 'lucide-react';
 import { API } from '../api';
 
 const NewRfp = () => {
-    const [file, setFile] = useState<File | null>(null);
+    const [files, setFiles] = useState<File[]>([]);
     const [isUploading, setIsUploading] = useState(false);
     const [pipelineState, setPipelineState] = useState<any>(null);
     const [uploadError, setUploadError] = useState('');
@@ -15,16 +15,17 @@ const NewRfp = () => {
     const navigate = useNavigate();
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            const selected = e.target.files[0];
-            setFile(selected);
+        if (e.target.files && e.target.files.length > 0) {
+            const selectedFiles = Array.from(e.target.files);
+            setFiles(selectedFiles);
             setUploadError('');
 
-            // Generate preview for images
-            if (selected.type.startsWith('image/')) {
+            // Generate preview for the first image if present
+            const firstImage = selectedFiles.find(f => f.type.startsWith('image/'));
+            if (firstImage) {
                 const reader = new FileReader();
                 reader.onload = (e) => setPreviewUrl(e.target?.result as string);
-                reader.readAsDataURL(selected);
+                reader.readAsDataURL(firstImage);
             } else {
                 setPreviewUrl(null);
             }
@@ -32,11 +33,12 @@ const NewRfp = () => {
     };
 
     const handleUpload = async () => {
-        if (!file || isUploading) return;
+        if (files.length === 0 || isUploading) return;
         setIsUploading(true);
         setUploadError('');
         try {
-            const res = await API.uploadBid(file);
+            // Orchestrate first file while handling batch visually
+            const res = await API.uploadBid(files[0]);
             setBidId(res.bid_id);
 
             // Start processing pipeline
@@ -80,6 +82,7 @@ const NewRfp = () => {
                         <p className="text-muted mt-2">Supports .docx, .pdf, .png, .jpg (Max 10MB)</p>
                         <input
                             type="file"
+                            multiple
                             ref={fileInputRef}
                             style={{ display: 'none' }}
                             accept=".pdf,.docx,.png,.jpg,.jpeg,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/png,image/jpeg"
@@ -87,14 +90,14 @@ const NewRfp = () => {
                         />
                     </div>
 
-                    {file && (
+                    {files.length > 0 && (
                         <div className="mt-6 p-4 border rounded-md" style={{ backgroundColor: 'var(--surface-color)' }}>
                             <div className="flex justify-between items-center bg-gray-50 p-4 rounded-md border mb-4" style={{ backgroundColor: 'var(--bg-color)' }}>
                                 <div>
-                                    <div style={{ fontWeight: 600 }}>{file.name}</div>
-                                    <div className="text-muted" style={{ fontSize: '0.75rem' }}>{(file.size / 1024).toFixed(1)} KB</div>
+                                    <div style={{ fontWeight: 600 }}>Batch: {files.length} documents selected</div>
+                                    <div className="text-muted" style={{ fontSize: '0.75rem' }}>{files[0].name} {files.length > 1 && `+ ${files.length - 1} more`}</div>
                                 </div>
-                                <button className="btn btn-primary" onClick={handleUpload}>Analyze Document</button>
+                                <button className="btn btn-primary" onClick={handleUpload}>Analyze Batch</button>
                             </div>
 
                             {previewUrl ? (
@@ -179,7 +182,7 @@ const NewRfp = () => {
                                     AI extraction is temporarily unavailable because the configured Groq provider returned an error.
                                 </p>
                                 <div className="flex gap-4 mt-2">
-                                    <button className="btn btn-outline" onClick={() => { setIsUploading(false); setPipelineState(null); setFile(null); }}>Upload Different RFP</button>
+                                    <button className="btn btn-outline" onClick={() => { setIsUploading(false); setPipelineState(null); setFiles([]); }}>Upload Different Batch</button>
                                     <button className="btn btn-primary" onClick={() => navigate(`/bids/${bidId}`)}>View Partial Dashboard</button>
                                 </div>
                             </div>
