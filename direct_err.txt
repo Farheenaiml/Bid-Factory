@@ -1,0 +1,46 @@
+Traceback (most recent call last):
+  File "C:\Users\zaree\AppData\Local\Programs\Python\Python314\Lib\asyncio\tasks.py", line 488, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "C:\Users\zaree\AppData\Local\Programs\Python\Python314\Lib\site-packages\rocketride\mixins\data.py", line 469, in send
+    return await pipe.close()
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\zaree\AppData\Local\Programs\Python\Python314\Lib\site-packages\rocketride\mixins\data.py", line 285, in close
+    response = await self._client.request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\zaree\AppData\Local\Programs\Python\Python314\Lib\site-packages\rocketride\mixins\connection.py", line 426, in request
+    return await super().request(request, timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\zaree\AppData\Local\Programs\Python\Python314\Lib\site-packages\rocketride\core\dap_client.py", line 237, in request
+    response = await future
+               ^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\zaree\Bid-Factory\backend\services\rocketride_service.py", line 47, in _execute
+    result = await asyncio.wait_for(client.send(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    ), timeout=25.0)
+    ^^^^^^^^^^^^^^^^
+  File "C:\Users\zaree\AppData\Local\Programs\Python\Python314\Lib\asyncio\tasks.py", line 487, in wait_for
+    async with timeouts.timeout(timeout):
+               ~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\zaree\AppData\Local\Programs\Python\Python314\Lib\asyncio\timeouts.py", line 114, in __aexit__
+    raise TimeoutError from exc_val
+TimeoutError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\zaree\Bid-Factory\direct_run.py", line 11, in main
+    res = await rocketride_service.analyze(bid, doc)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\zaree\Bid-Factory\backend\services\rocketride_service.py", line 22, in analyze
+    return await self._execute(bid, document)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\zaree\Bid-Factory\backend\services\rocketride_service.py", line 57, in _execute
+    raise RocketRideServiceError("RocketRide LLM returned an error instead of requirements: **LLM error** \u2014 ClientError: 429 RESOURCE_EXHAUSTED (Timeout).")
+backend.services.rocketride_service.RocketRideServiceError: RocketRide LLM returned an error instead of requirements: **LLM error** — ClientError: 429 RESOURCE_EXHAUSTED (Timeout).

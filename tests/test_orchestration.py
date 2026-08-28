@@ -226,6 +226,18 @@ def test_answer_lane_accepts_markdown_json_and_multiple_answer_strings() -> None
     assert result.requirements[1].category == "security"
 
 
+def test_answer_lane_normalises_provider_requirement_ids() -> None:
+    result = StructuredAIRequirementExtractor().extract_ai({
+        "requirements": [
+            '[{"requirement_id": "REQ-001", "requirement_text": "The supplier must provide support."}]',
+        ],
+    })
+
+    assert len(result.requirements) == 1
+    assert result.requirements[0].requirement_id
+    assert result.requirements[0].requirement_text == "The supplier must provide support."
+
+
 def test_answer_lane_ignores_non_structured_commentary_when_json_is_present() -> None:
     result = StructuredAIRequirementExtractor().extract_ai({
         "requirements": [

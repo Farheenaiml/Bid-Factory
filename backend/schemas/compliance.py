@@ -14,6 +14,20 @@ class ComplianceStatus(str, Enum):
     needs_human_review = "NEEDS_HUMAN_REVIEW"
 
 
+class ConflictSeverity(str, Enum):
+    no_conflict = "NO_CONFLICT"
+    low = "LOW"
+    medium = "MEDIUM"
+    high = "HIGH"
+
+
+class ConflictAnalysis(BaseModel):
+    conflict_detected: bool
+    severity: ConflictSeverity
+    reason: str
+    conflicting_evidence: list[RetrievalResult] = Field(default_factory=list)
+
+
 class ComplianceResult(BaseModel):
     requirement: ExtractedRequirement
     status: ComplianceStatus
@@ -21,6 +35,7 @@ class ComplianceResult(BaseModel):
     supporting_evidence: list[RetrievalResult] = Field(default_factory=list)
     evidence_missing: bool
     explanation: str
+    conflict_analysis: ConflictAnalysis | None = None
 
 
 class ComplianceAnalysisResult(BaseModel):

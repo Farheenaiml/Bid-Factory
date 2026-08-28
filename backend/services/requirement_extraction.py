@@ -2,6 +2,7 @@ import re
 import json
 from collections.abc import Iterable
 from typing import Protocol
+from uuid import UUID
 
 from backend.schemas.requirements import (
     ExtractedRequirement,
@@ -39,16 +40,31 @@ class StructuredAIRequirementExtractor:
             raise AIExtractionError("RocketRide AI output did not contain structured requirements.")
         if not isinstance(candidates, list):
             raise AIExtractionError("RocketRide AI requirements must be a JSON array.")
-        if any(isinstance(candidate, str) and candidate.lstrip().startswith("**LLM error**") for candidate in candidates):
-            raise AIExtractionError("RocketRide LLM returned an error instead of requirements.")
+        error_candidate = next((c for c in candidates if isinstance(c, str) and c.lstrip().startswith("**LLM error**")), None)
+        if error_candidate:
+            print(f"DEBUG LLM CANDIDATE: {candidates}")
+            raise AIExtractionError(f"RocketRide LLM returned an error instead of requirements: {error_candidate}")
         try:
-            requirements = [ExtractedRequirement.model_validate(candidate) for candidate in candidates]
+            requirements = [ExtractedRequirement.model_validate(self._normalise_candidate(candidate)) for candidate in candidates]
         except Exception as exc:
             raise AIExtractionError("RocketRide AI requirements failed schema validation.") from exc
         return RequirementExtractionResult(
             requirements=requirements,
             message="AI requirements found" if requirements else "no explicit requirements found",
         )
+
+    @staticmethod
+    def _normalise_candidate(candidate: object) -> object:
+        if not isinstance(candidate, dict) or "requirement_id" not in candidate:
+            return candidate
+        requirement_id = candidate["requirement_id"]
+        try:
+            UUID(str(requirement_id))
+        except (ValueError, TypeError, AttributeError):
+            normalised = dict(candidate)
+            normalised.pop("requirement_id", None)
+            return normalised
+        return candidate
 
     @classmethod
     def _find_requirements(cls, payload: object) -> list[object] | None:

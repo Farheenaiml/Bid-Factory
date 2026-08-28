@@ -1,0 +1,208 @@
+﻿python : Traceback (most 
+recent call last):
+At line:1 char:33
++ ...  .\.venv\Scripts\Activ
+ate.ps1; python 
+try_models.py > result.txt 
+2>&1
++                           
+         ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          
+    : NotSpecified: (Trace  
+  back (most recent call    
+ last)::String) [], Remo    
+teException
+    + FullyQualifiedErrorId 
+    : NativeCommandError
+ 
+  File "C:\Users\zaree\Bid-F
+actory\backend\services\rock
+etride_service.py", line 
+40, in _execute
+    execution = await client
+.use(filepath=str(self._pipe
+line_path))
+                ^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^
+  File "C:\Users\zaree\Bid-F
+actory\.venv\Lib\site-packag
+es\rocketride\mixins\executi
+on.py", line 283, in use
+    response_body = await 
+self.call('execute', 
+**arguments)
+                    ^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^
+  File "C:\Users\zaree\Bid-F
+actory\.venv\Lib\site-packag
+es\rocketride\client.py", 
+line 314, in call
+    raise RuntimeError(respo
+nse.get('message', 
+f'{command} failed'))
+RuntimeError: Profile 
+gemini-1.5-flash is not 
+defined in llm_gemini
+Traceback (most recent call 
+last):
+  File "C:\Users\zaree\Bid-F
+actory\backend\services\rock
+etride_service.py", line 
+40, in _execute
+    execution = await client
+.use(filepath=str(self._pipe
+line_path))
+                ^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^
+  File "C:\Users\zaree\Bid-F
+actory\.venv\Lib\site-packag
+es\rocketride\mixins\executi
+on.py", line 283, in use
+    response_body = await 
+self.call('execute', 
+**arguments)
+                    ^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^
+  File "C:\Users\zaree\Bid-F
+actory\.venv\Lib\site-packag
+es\rocketride\client.py", 
+line 314, in call
+    raise RuntimeError(respo
+nse.get('message', 
+f'{command} failed'))
+RuntimeError: Profile 
+gemini-1.5-pro is not 
+defined in llm_gemini
+Traceback (most recent call 
+last):
+  File "C:\Users\zaree\Bid-F
+actory\backend\services\rock
+etride_service.py", line 
+40, in _execute
+    execution = await client
+.use(filepath=str(self._pipe
+line_path))
+                ^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^
+  File "C:\Users\zaree\Bid-F
+actory\.venv\Lib\site-packag
+es\rocketride\mixins\executi
+on.py", line 283, in use
+    response_body = await 
+self.call('execute', 
+**arguments)
+                    ^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^
+  File "C:\Users\zaree\Bid-F
+actory\.venv\Lib\site-packag
+es\rocketride\client.py", 
+line 314, in call
+    raise RuntimeError(respo
+nse.get('message', 
+f'{command} failed'))
+RuntimeError: Profile 
+models/gemini-1.5-flash is 
+not defined in llm_gemini
+Traceback (most recent call 
+last):
+  File "C:\Users\zaree\Bid-F
+actory\backend\services\rock
+etride_service.py", line 
+40, in _execute
+    execution = await client
+.use(filepath=str(self._pipe
+line_path))
+                ^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^
+  File "C:\Users\zaree\Bid-F
+actory\.venv\Lib\site-packag
+es\rocketride\mixins\executi
+on.py", line 283, in use
+    response_body = await 
+self.call('execute', 
+**arguments)
+                    ^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^
+  File "C:\Users\zaree\Bid-F
+actory\.venv\Lib\site-packag
+es\rocketride\client.py", 
+line 314, in call
+    raise RuntimeError(respo
+nse.get('message', 
+f'{command} failed'))
+RuntimeError: Pipeline does 
+not have a source component 
+defined
+Traceback (most recent call 
+last):
+  File "C:\Users\zaree\Bid-F
+actory\backend\services\rock
+etride_service.py", line 
+40, in _execute
+    execution = await client
+.use(filepath=str(self._pipe
+line_path))
+                ^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^
+  File "C:\Users\zaree\Bid-F
+actory\.venv\Lib\site-packag
+es\rocketride\mixins\executi
+on.py", line 283, in use
+    response_body = await 
+self.call('execute', 
+**arguments)
+                    ^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^
+  File "C:\Users\zaree\Bid-F
+actory\.venv\Lib\site-packag
+es\rocketride\client.py", 
+line 314, in call
+    raise RuntimeError(respo
+nse.get('message', 
+f'{command} failed'))
+RuntimeError: Profile 
+gemini-flash is not defined 
+in llm_gemini
+Traceback (most recent call 
+last):
+  File "C:\Users\zaree\Bid-F
+actory\backend\services\rock
+etride_service.py", line 
+40, in _execute
+    execution = await client
+.use(filepath=str(self._pipe
+line_path))
+                ^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^
+  File "C:\Users\zaree\Bid-F
+actory\.venv\Lib\site-packag
+es\rocketride\mixins\executi
+on.py", line 283, in use
+    response_body = await 
+self.call('execute', 
+**arguments)
+                    ^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^
+  File "C:\Users\zaree\Bid-F
+actory\.venv\Lib\site-packag
+es\rocketride\client.py", 
+line 314, in call
+    raise RuntimeError(respo
+nse.get('message', 
+f'{command} failed'))
+RuntimeError: Profile 
+gemini-pro is not defined 
+in llm_gemini

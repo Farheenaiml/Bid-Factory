@@ -1,0 +1,361 @@
+﻿Verifying SQLite DB at C:\Users\zaree\Bid-Factory\data\vector_store\knowledge_base.sqlite3...
+Documents in DB: 8
+Chunks in DB: 8
+================================================================================
+QUERY: What availability does the company guarantee?
+  Result 1:
+    Document: sla_and_support.docx
+    Section: Escalation
+    Page: None
+    Score: 0.4932
+    Metadata: {"page_number": null, "section": "Escalation", "document_type": "docx"}
+    Evidence: SLA and Support
+Availability SLA
+BidFactory Solutions provides an industry-leading Service Level Agreement (SLA) guaranteeing 99.9% uptime and availability for all enterprise clients.
+Support Hours
+We provide 24/7/365 global support. Our support team is online and available around the clock.
+Response Times
+We guarantee a response time of under 1 hour for all Severity 1 (critical) production incidents.
+Incident Handling
+Our incident handling protocol involves immediate triage by Level 2 engineers and continuous updates every 30 minutes until resolution.
+Escalation
+Issues that remain unresolved for two hours are automatically escalated to the executive engineering team for expedited remediation.
+  Result 2:
+    Document: certifications_and_policies.docx
+    Section: Backup and Recovery
+    Page: None
+    Score: 0.4082
+    Metadata: {"page_number": null, "section": "Backup and Recovery", "document_type": "docx"}
+    Evidence: Certifications and Policies
+Security Policies
+We enforce a zero-trust network architecture policy, where every device, user, and network flow is verified strictly without implicit trust.
+Data Retention
+Our data retention policy defaults to keeping logs for a minimum of 1 year, and client information is permanently destroyed 30 days after contract termination.
+Backup and Recovery
+We execute automated daily backups with a Recovery Point Objective (RPO) of 24 hours and a Recovery Time Objective (RTO) of 1 hour.
+  Result 3:
+    Document: company_profile.docx
+    Section: Service Areas
+    Page: None
+    Score: 0.2720
+    Metadata: {"page_number": null, "section": "Service Areas", "document_type": "docx"}
+    Evidence: Company Profile
+Company Overview
+BidFactory Solutions is a leading provider of innovative software and technology services. We specialize in transforming enterprise workflows through intelligent automation and secure data management.
+Years of Experience
+Founded in 2012, BidFactory Solutions has over 14 years of experience delivering robust business-to-business software solutions.
+Team Capabilities
+Our global team consists of over 500 seasoned software engineers, data scientists, and cloud architects dedicated to delivering excellence.
+Locations
+We are headquartered in San Francisco, CA, with primary regional offices in New York, London, and Singapore.
+Service Areas
+We provide end-to-end services in cloud architecture, AI and Machine Learning, software development, and enterprise managed services.
+  Result 4:
+    Document: service_catalog.docx
+    Section: Continuous Support
+    Page: None
+    Score: 0.2648
+    Metadata: {"page_number": null, "section": "Continuous Support", "document_type": "docx"}
+    Evidence: Service Catalog
+Services Offered
+BidFactory Solutions provides a varied suite of consulting, implementation, and managed automation services to accelerate digital transformation.
+Implementation
+Our implementation service handles the end-to-end integration of our SaaS tools into your unique on-premise or cloud environments.
+Consulting
+We offer strategic consulting to assist enterprises in redesigning outdated manual workflows utilizing modern AI technologies.
+Managed Services
+We provide remote administration and proactive monitoring of your infrastructure guaranteeing optimal health and stability.
+Continuous Support
+Dedicated technical account managers provide ongoing continuous support aligning your operations with our technology updates.
+================================================================================
+QUERY: Does the company provide 24/7 support?
+  Result 1:
+    Document: sla_and_support.docx
+    Section: Escalation
+    Page: None
+    Score: 0.4197
+    Metadata: {"page_number": null, "section": "Escalation", "document_type": "docx"}
+    Evidence: SLA and Support
+Availability SLA
+BidFactory Solutions provides an industry-leading Service Level Agreement (SLA) guaranteeing 99.9% uptime and availability for all enterprise clients.
+Support Hours
+We provide 24/7/365 global support. Our support team is online and available around the clock.
+Response Times
+We guarantee a response time of under 1 hour for all Severity 1 (critical) production incidents.
+Incident Handling
+Our incident handling protocol involves immediate triage by Level 2 engineers and continuous updates every 30 minutes until resolution.
+Escalation
+Issues that remain unresolved for two hours are automatically escalated to the executive engineering team for expedited remediation.
+  Result 2:
+    Document: service_catalog.docx
+    Section: Continuous Support
+    Page: None
+    Score: 0.3263
+    Metadata: {"page_number": null, "section": "Continuous Support", "document_type": "docx"}
+    Evidence: Service Catalog
+Services Offered
+BidFactory Solutions provides a varied suite of consulting, implementation, and managed automation services to accelerate digital transformation.
+Implementation
+Our implementation service handles the end-to-end integration of our SaaS tools into your unique on-premise or cloud environments.
+Consulting
+We offer strategic consulting to assist enterprises in redesigning outdated manual workflows utilizing modern AI technologies.
+Managed Services
+We provide remote administration and proactive monitoring of your infrastructure guaranteeing optimal health and stability.
+Continuous Support
+Dedicated technical account managers provide ongoing continuous support aligning your operations with our technology updates.
+  Result 3:
+    Document: certifications_and_policies.docx
+    Section: Backup and Recovery
+    Page: None
+    Score: 0.2950
+    Metadata: {"page_number": null, "section": "Backup and Recovery", "document_type": "docx"}
+    Evidence: Certifications and Policies
+Security Policies
+We enforce a zero-trust network architecture policy, where every device, user, and network flow is verified strictly without implicit trust.
+Data Retention
+Our data retention policy defaults to keeping logs for a minimum of 1 year, and client information is permanently destroyed 30 days after contract termination.
+Backup and Recovery
+We execute automated daily backups with a Recovery Point Objective (RPO) of 24 hours and a Recovery Time Objective (RTO) of 1 hour.
+================================================================================
+QUERY: What cloud platforms does the company support?
+  Result 1:
+    Document: technical_capabilities.docx
+    Section: Deployment and Scalability
+    Page: None
+    Score: 0.4983
+    Metadata: {"page_number": null, "section": "Deployment and Scalability", "document_type": "docx"}
+    Evidence: Technical Capabilities
+Cloud Platforms
+We securely design and host solutions across all major cloud platforms, including Amazon Web Services (AWS), Microsoft Azure, and Google Cloud Platform (GCP).
+Software Development
+Our software development lifecycle leverages Agile methodologies, utilizing Python, TypeScript, and Go for highly scalable backends and resilient frontends.
+AI and ML
+We employ cutting-edge AI and Machine Learning technologies to power our intelligent systems, utilizing frameworks like PyTorch and TensorFlow.
+APIs
+Our solutions rely on robust RESTful APIs and GraphQL to ensure seamless integration and data exchange across enterprise systems.
+Deployment and Scalability
+Using Kubernetes and Docker, we provide containerized deployments that auto-scale to meet varying traffic demands seamlessly.
+  Result 2:
+    Document: company_profile.docx
+    Section: Service Areas
+    Page: None
+    Score: 0.4053
+    Metadata: {"page_number": null, "section": "Service Areas", "document_type": "docx"}
+    Evidence: Company Profile
+Company Overview
+BidFactory Solutions is a leading provider of innovative software and technology services. We specialize in transforming enterprise workflows through intelligent automation and secure data management.
+Years of Experience
+Founded in 2012, BidFactory Solutions has over 14 years of experience delivering robust business-to-business software solutions.
+Team Capabilities
+Our global team consists of over 500 seasoned software engineers, data scientists, and cloud architects dedicated to delivering excellence.
+Locations
+We are headquartered in San Francisco, CA, with primary regional offices in New York, London, and Singapore.
+Service Areas
+We provide end-to-end services in cloud architecture, AI and Machine Learning, software development, and enterprise managed services.
+  Result 3:
+    Document: service_catalog.docx
+    Section: Continuous Support
+    Page: None
+    Score: 0.3586
+    Metadata: {"page_number": null, "section": "Continuous Support", "document_type": "docx"}
+    Evidence: Service Catalog
+Services Offered
+BidFactory Solutions provides a varied suite of consulting, implementation, and managed automation services to accelerate digital transformation.
+Implementation
+Our implementation service handles the end-to-end integration of our SaaS tools into your unique on-premise or cloud environments.
+Consulting
+We offer strategic consulting to assist enterprises in redesigning outdated manual workflows utilizing modern AI technologies.
+Managed Services
+We provide remote administration and proactive monitoring of your infrastructure guaranteeing optimal health and stability.
+Continuous Support
+Dedicated technical account managers provide ongoing continuous support aligning your operations with our technology updates.
+  Result 4:
+    Document: sla_and_support.docx
+    Section: Escalation
+    Page: None
+    Score: 0.3211
+    Metadata: {"page_number": null, "section": "Escalation", "document_type": "docx"}
+    Evidence: SLA and Support
+Availability SLA
+BidFactory Solutions provides an industry-leading Service Level Agreement (SLA) guaranteeing 99.9% uptime and availability for all enterprise clients.
+Support Hours
+We provide 24/7/365 global support. Our support team is online and available around the clock.
+Response Times
+We guarantee a response time of under 1 hour for all Severity 1 (critical) production incidents.
+Incident Handling
+Our incident handling protocol involves immediate triage by Level 2 engineers and continuous updates every 30 minutes until resolution.
+Escalation
+Issues that remain unresolved for two hours are automatically escalated to the executive engineering team for expedited remediation.
+  Result 5:
+    Document: previous_projects.docx
+    Section: Project Beta - Healthcare Data Lake
+    Page: None
+    Score: 0.3023
+    Metadata: {"page_number": null, "section": "Project Beta - Healthcare Data Lake", "document_type": "docx"}
+    Evidence: Previous Projects
+Project Alpha - Financial Automation
+Description: We partnered with Global Bank Corp to automate their loan origination system leveraging intelligent document extraction.
+Technologies: Python, Kubernetes, AWS, PyTorch.
+Outcomes: Reduced manual processing time by 40% and improved accuracy to 99%.
+Industry: Finance and Banking.
+Project Beta - Healthcare Data Lake
+Description: Built a HIPAA-compliant healthcare data lake for National Health Partners to aggregate millions of patient records safely.
+Technologies: Azure, Databricks, PostgreSQL.
+Outcomes: Unified multi-hospital data silos and enabled rapid analytics query resolution.
+Industry: Healthcare.
+================================================================================
+QUERY: What AI and machine learning capabilities does the company have?
+  Result 1:
+    Document: ai_ml_capabilities.docx
+    Section: MLOps
+    Page: None
+    Score: 0.5173
+    Metadata: {"page_number": null, "section": "MLOps", "document_type": "docx"}
+    Evidence: AI and ML Capabilities
+Machine Learning
+Our machine learning practice trains and fine-tunes custom predictive engines to support intelligent enterprise decision-making.
+Natural Language Processing (NLP)
+We leverage advanced NLP models natively integrated into our RAG systems to parse complex documents and extract meaningful insights.
+Computer Vision
+Our computer vision models specialize in automated document OCR and layout detection for rapid PDF processing.
+Model Deployment
+We deploy AI models seamlessly utilizing scalable Triton Inference Server clusters equipped with GPU acceleration.
+MLOps
+Our comprehensive MLOps pipeline guarantees robust model tracking, automated drift detection, and continuous retraining capabilities.
+  Result 2:
+    Document: company_profile.docx
+    Section: Service Areas
+    Page: None
+    Score: 0.4702
+    Metadata: {"page_number": null, "section": "Service Areas", "document_type": "docx"}
+    Evidence: Company Profile
+Company Overview
+BidFactory Solutions is a leading provider of innovative software and technology services. We specialize in transforming enterprise workflows through intelligent automation and secure data management.
+Years of Experience
+Founded in 2012, BidFactory Solutions has over 14 years of experience delivering robust business-to-business software solutions.
+Team Capabilities
+Our global team consists of over 500 seasoned software engineers, data scientists, and cloud architects dedicated to delivering excellence.
+Locations
+We are headquartered in San Francisco, CA, with primary regional offices in New York, London, and Singapore.
+Service Areas
+We provide end-to-end services in cloud architecture, AI and Machine Learning, software development, and enterprise managed services.
+  Result 3:
+    Document: previous_projects.docx
+    Section: Project Beta - Healthcare Data Lake
+    Page: None
+    Score: 0.3744
+    Metadata: {"page_number": null, "section": "Project Beta - Healthcare Data Lake", "document_type": "docx"}
+    Evidence: Previous Projects
+Project Alpha - Financial Automation
+Description: We partnered with Global Bank Corp to automate their loan origination system leveraging intelligent document extraction.
+Technologies: Python, Kubernetes, AWS, PyTorch.
+Outcomes: Reduced manual processing time by 40% and improved accuracy to 99%.
+Industry: Finance and Banking.
+Project Beta - Healthcare Data Lake
+Description: Built a HIPAA-compliant healthcare data lake for National Health Partners to aggregate millions of patient records safely.
+Technologies: Azure, Databricks, PostgreSQL.
+Outcomes: Unified multi-hospital data silos and enabled rapid analytics query resolution.
+Industry: Healthcare.
+  Result 4:
+    Document: service_catalog.docx
+    Section: Continuous Support
+    Page: None
+    Score: 0.3687
+    Metadata: {"page_number": null, "section": "Continuous Support", "document_type": "docx"}
+    Evidence: Service Catalog
+Services Offered
+BidFactory Solutions provides a varied suite of consulting, implementation, and managed automation services to accelerate digital transformation.
+Implementation
+Our implementation service handles the end-to-end integration of our SaaS tools into your unique on-premise or cloud environments.
+Consulting
+We offer strategic consulting to assist enterprises in redesigning outdated manual workflows utilizing modern AI technologies.
+Managed Services
+We provide remote administration and proactive monitoring of your infrastructure guaranteeing optimal health and stability.
+Continuous Support
+Dedicated technical account managers provide ongoing continuous support aligning your operations with our technology updates.
+  Result 5:
+    Document: technical_capabilities.docx
+    Section: Deployment and Scalability
+    Page: None
+    Score: 0.3625
+    Metadata: {"page_number": null, "section": "Deployment and Scalability", "document_type": "docx"}
+    Evidence: Technical Capabilities
+Cloud Platforms
+We securely design and host solutions across all major cloud platforms, including Amazon Web Services (AWS), Microsoft Azure, and Google Cloud Platform (GCP).
+Software Development
+Our software development lifecycle leverages Agile methodologies, utilizing Python, TypeScript, and Go for highly scalable backends and resilient frontends.
+AI and ML
+We employ cutting-edge AI and Machine Learning technologies to power our intelligent systems, utilizing frameworks like PyTorch and TensorFlow.
+APIs
+Our solutions rely on robust RESTful APIs and GraphQL to ensure seamless integration and data exchange across enterprise systems.
+Deployment and Scalability
+Using Kubernetes and Docker, we provide containerized deployments that auto-scale to meet varying traffic demands seamlessly.
+================================================================================
+QUERY: What security certifications does the company have?
+  Result 1:
+    Document: security_and_compliance.docx
+    Section: Compliance Capabilities
+    Page: None
+    Score: 0.5638
+    Metadata: {"page_number": null, "section": "Compliance Capabilities", "document_type": "docx"}
+    Evidence: Security and Compliance
+Security Controls
+We implement stringent security controls including continuous vulnerability scanning, intrusion detection systems (IDS), and web application firewalls.
+Data Protection
+All customer data is AES-256 encrypted at rest and TLS 1.3 encrypted in transit. We guarantee no unauthorized data exfiltration.
+Access Control
+Access control is governed by strict Role-Based Access Control (RBAC) and mandatory multi-factor authentication (MFA).
+Certifications
+We hold official ISO 27001 certification for Information Security Management and SOC 2 Type II attestation.
+Compliance Capabilities
+Our software supports enterprise compliance requirements for GDPR and HIPAA by offering selective geographical data residency and full audit trails.
+  Result 2:
+    Document: certifications_and_policies.docx
+    Section: Backup and Recovery
+    Page: None
+    Score: 0.4077
+    Metadata: {"page_number": null, "section": "Backup and Recovery", "document_type": "docx"}
+    Evidence: Certifications and Policies
+Security Policies
+We enforce a zero-trust network architecture policy, where every device, user, and network flow is verified strictly without implicit trust.
+Data Retention
+Our data retention policy defaults to keeping logs for a minimum of 1 year, and client information is permanently destroyed 30 days after contract termination.
+Backup and Recovery
+We execute automated daily backups with a Recovery Point Objective (RPO) of 24 hours and a Recovery Time Objective (RTO) of 1 hour.
+  Result 3:
+    Document: company_profile.docx
+    Section: Service Areas
+    Page: None
+    Score: 0.3144
+    Metadata: {"page_number": null, "section": "Service Areas", "document_type": "docx"}
+    Evidence: Company Profile
+Company Overview
+BidFactory Solutions is a leading provider of innovative software and technology services. We specialize in transforming enterprise workflows through intelligent automation and secure data management.
+Years of Experience
+Founded in 2012, BidFactory Solutions has over 14 years of experience delivering robust business-to-business software solutions.
+Team Capabilities
+Our global team consists of over 500 seasoned software engineers, data scientists, and cloud architects dedicated to delivering excellence.
+Locations
+We are headquartered in San Francisco, CA, with primary regional offices in New York, London, and Singapore.
+Service Areas
+We provide end-to-end services in cloud architecture, AI and Machine Learning, software development, and enterprise managed services.
+================================================================================
+QUERY: What previous projects has the company completed?
+  Result 1:
+    Document: company_profile.docx
+    Section: Service Areas
+    Page: None
+    Score: 0.3313
+    Metadata: {"page_number": null, "section": "Service Areas", "document_type": "docx"}
+    Evidence: Company Profile
+Company Overview
+BidFactory Solutions is a leading provider of innovative software and technology services. We specialize in transforming enterprise workflows through intelligent automation and secure data management.
+Years of Experience
+Founded in 2012, BidFactory Solutions has over 14 years of experience delivering robust business-to-business software solutions.
+Team Capabilities
+Our global team consists of over 500 seasoned software engineers, data scientists, and cloud architects dedicated to delivering excellence.
+Locations
+We are headquartered in San Francisco, CA, with primary regional offices in New York, London, and Singapore.
+Service Areas
+We provide end-to-end services in cloud architecture, AI and Machine Learning, software development, and enterprise managed services.
+================================================================================

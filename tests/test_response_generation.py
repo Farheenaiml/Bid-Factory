@@ -1,3 +1,4 @@
+from backend.schemas.compliance import ComplianceResult, ComplianceStatus, ConflictAnalysis, ConflictSeverity
 from uuid import uuid4
 
 from backend.schemas.compliance import ComplianceResult, ComplianceStatus
@@ -99,3 +100,20 @@ def test_missing_compliance_result_is_safe() -> None:
     assert response.compliance_status == "NOT_FOUND"
     assert response.needs_human_review is True
     assert response.confidence == 0
+
+
+def test_conflict_forces_review_without_changing_compliance_status() -> None:
+    requirement = make_requirement()
+    evidence = [make_evidence("The company provides encrypted storage.")]
+    compliance = make_compliance(requirement, ComplianceStatus.covered, evidence)
+    compliance.conflict_analysis = ConflictAnalysis(
+        conflict_detected=True,
+        severity=ConflictSeverity.medium,
+        reason="Evidence conflicts with the requirement.",
+        conflicting_evidence=evidence,
+    )
+
+    response = ResponseGenerationService().generate([requirement], [compliance]).responses[0]
+
+    assert response.compliance_status == "COVERED"
+    assert response.needs_human_review is True

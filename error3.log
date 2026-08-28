@@ -1,0 +1,23 @@
+Traceback (most recent call last):
+  File "C:\Users\zaree\Bid-Factory\backend\services\rocketride_service.py", line 40, in _execute
+    execution = await client.use(filepath=str(self._pipeline_path))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\zaree\Bid-Factory\.venv\Lib\site-packages\rocketride\mixins\execution.py", line 283, in use
+    response_body = await self.call('execute', **arguments)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\zaree\Bid-Factory\.venv\Lib\site-packages\rocketride\client.py", line 314, in call
+    raise RuntimeError(response.get('message', f'{command} failed'))
+RuntimeError: Profile gemini-1.5-flash-8b is not defined in llm_gemini
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\zaree\Bid-Factory\execute.py", line 9, in r
+    print(await rocketride_service.analyze(b, open('real_test_rfp.docx', 'rb').read()))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\zaree\Bid-Factory\backend\services\rocketride_service.py", line 22, in analyze
+    return await self._execute(bid, document)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\zaree\Bid-Factory\backend\services\rocketride_service.py", line 64, in _execute
+    raise RocketRideServiceError("RocketRide pipeline execution failed.") from exc
+backend.services.rocketride_service.RocketRideServiceError: RocketRide pipeline execution failed.

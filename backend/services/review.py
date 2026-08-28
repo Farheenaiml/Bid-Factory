@@ -34,6 +34,7 @@ class ReviewService:
         compliance_status: str,
         confidence: float,
         supporting_evidence: list,
+        conflict_analysis: dict | None = None
     ) -> ReviewItem:
         item = ReviewItem(
             bid_id=bid_id,
@@ -42,6 +43,7 @@ class ReviewService:
             compliance_status=compliance_status,
             confidence=confidence,
             supporting_evidence=supporting_evidence,
+            conflict_analysis=conflict_analysis,
         )
         if self._store is None:
             self._items[item.review_id] = item

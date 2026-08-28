@@ -48,26 +48,54 @@ class SQLiteVectorStore:
         except Exception as exc:
             raise VectorStoreError("Unable to add document to the vector store.") from exc
 
-    def search(self, query_embedding: list[float], top_k: int, min_score: float) -> list[RetrievalResult]:
+    def search(self, query: str, query_embedding: list[float], top_k: int, min_score: float) -> list[RetrievalResult]:
+        import re
         try:
-            query = np.asarray(query_embedding, dtype=np.float32)
-            query_norm = np.linalg.norm(query)
-            if query_norm == 0:
-                return []
+            q_lower = query.lower()
+            q_words_all = set(re.findall(r'\b\w+\b', q_lower))
+            stop_words = {"the","a","an","and","or","is","are","of","to","in","for","with","must","provide","have","what","does",
+                          "company","system","service","support","data","project","solution", "what's", "do", "we", "can", "how"}
+            q_words = {w for w in q_words_all if w not in stop_words}
+            
+            embedding_np = np.asarray(query_embedding, dtype=np.float32)
+            query_norm = np.linalg.norm(embedding_np)
+            
             scored: list[tuple[float, RetrievalResult]] = []
             with self._connect() as connection:
                 rows = connection.execute("SELECT document_name, document_type, source_path, text, page_number, section, metadata, embedding FROM chunks").fetchall()
             for row in rows:
                 vector = np.frombuffer(row["embedding"], dtype=np.float32)
-                denominator = query_norm * np.linalg.norm(vector)
-                score = float(np.dot(query, vector) / denominator) if denominator else 0.0
-                if score >= min_score:
+                semantic_score = 0.0
+                if query_norm > 0:
+                    denominator = query_norm * np.linalg.norm(vector)
+                    semantic_score = float(np.dot(embedding_np, vector) / denominator) if denominator else 0.0
+                
+                lexical_score = 0.0
+                if q_words_all:
+                    t_lower = row["text"].lower()
+                    # 1. Exact phrase match
+                    if len(q_words_all) > 1 and q_lower in t_lower:
+                        lexical_score += 0.5
+                    
+                    # 2. Term match (ignore stop words for scoring individual overlaps)
+                    t_words = set(re.findall(r'\b\w+\b', t_lower))
+                    if q_words:
+                        matches = sum(1 for word in q_words if word in t_words)
+                        lexical_score += 0.5 * (matches / len(q_words))
+                    
+                combined_score = (0.7 * semantic_score) + (0.3 * lexical_score)
+                
+                if combined_score >= min_score:
                     metadata: dict[str, Any] = json.loads(row["metadata"])
                     metadata.update({"document_type": row["document_type"]})
-                    scored.append((score, RetrievalResult(
+                    metadata["hybrid_scores"] = {
+                        "semantic": round(semantic_score, 4),
+                        "lexical": round(lexical_score, 4)
+                    }
+                    scored.append((combined_score, RetrievalResult(
                         document_name=row["document_name"], source_path=row["source_path"],
                         page_number=row["page_number"], section=row["section"],
-                        retrieved_text=row["text"], similarity_score=score, metadata=metadata,
+                        retrieved_text=row["text"], similarity_score=combined_score, metadata=metadata,
                     )))
             scored.sort(key=lambda item: item[0], reverse=True)
             return [result for _, result in scored[:top_k]]

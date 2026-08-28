@@ -53,12 +53,38 @@ async def upload_bid(
 @router.post("/bids/{bid_id}/analyze", response_model=BidAnalysisResult, tags=["bids"])
 async def analyze_bid(bid_id: UUID) -> BidAnalysisResult:
     bid = repository.get_bid(bid_id)
-    return await bid_analysis_orchestrator.analyze(bid, repository.get_document(bid_id))
+    result = await bid_analysis_orchestrator.analyze(bid, repository.get_document(bid_id))
+    
+    # Save the analyzed requirements into the database so the UI can fetch them
+    from backend.models.entities import Requirement
+    for i, ext_req in enumerate(result.requirements):
+        req = Requirement(
+            id=ext_req.requirement_id,
+            requirement_id=ext_req.requirement_id,
+            bid_id=bid_id,
+            reference=f"REQ-{i+1}",
+            text=ext_req.requirement_text,
+            requirement_text=ext_req.requirement_text,
+            category=ext_req.category,
+            priority=ext_req.priority,
+            deadline=ext_req.deadline,
+            compliance_type=ext_req.compliance_type,
+            source_section=ext_req.source_section,
+            source_page=ext_req.source_page
+        )
+        repository._requirements[req.id] = req
+        
+    return result
 
 
 @router.get("/bids/{bid_id}", response_model=Bid, tags=["bids"])
 def get_bid(bid_id: UUID) -> Bid:
     return repository.get_bid(bid_id)
+
+
+@router.get("/bids", response_model=list[Bid], tags=["bids"])
+def get_all_bids() -> list[Bid]:
+    return list(repository._bids.values())
 
 
 @router.get(
@@ -124,6 +150,18 @@ def list_review_items(bid_id: UUID) -> ReviewCollectionResponse:
 @router.get("/reviews/{review_id}", response_model=ReviewItem, tags=["reviews"])
 def get_review_item(review_id: UUID) -> ReviewItem:
     return review_service.get_item(review_id)
+
+
+@router.get("/reviews", response_model=ReviewCollectionResponse, tags=["reviews"])
+def get_all_reviews() -> ReviewCollectionResponse:
+    items = list(repository._review_items.values())
+    return ReviewCollectionResponse(
+        items=items,
+        total_pending=sum(1 for r in items if r.review_status == "PENDING"),
+        total_approved=sum(1 for r in items if r.review_status == "APPROVED"),
+        total_rejected=sum(1 for r in items if r.review_status == "REJECTED"),
+        total_needs_revision=sum(1 for r in items if r.review_status == "NEEDS_REVISION"),
+    )
 
 
 @router.post("/reviews/{review_id}/approve", response_model=ReviewItem, tags=["reviews"])

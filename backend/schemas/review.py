@@ -23,6 +23,7 @@ class ReviewItem(BaseModel):
     compliance_status: str
     confidence: float = Field(ge=0, le=1)
     supporting_evidence: list[RetrievalResult] = Field(default_factory=list)
+    conflict_analysis: dict | None = None
     review_status: ReviewStatus = ReviewStatus.pending
     reviewer_comment: str | None = None
     reviewer: str | None = None
@@ -55,8 +56,12 @@ class ReviewStatusResponse(BaseModel):
 
 
 class ReviewCollectionResponse(BaseModel):
-    bid_id: UUID
+    bid_id: UUID | None = None
     items: list[ReviewItem] = Field(default_factory=list)
+    total_pending: int = 0
+    total_approved: int = 0
+    total_rejected: int = 0
+    total_needs_revision: int = 0
 
 
 class ReviewGenerationItem(BaseModel):

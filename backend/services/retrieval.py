@@ -15,5 +15,5 @@ class RetrievalService:
     def search(self, query: str) -> dict[str, Any]:
         if not query.strip():
             return {"results": [], "message": "no relevant evidence found"}
-        results: list[RetrievalResult] = self._vector_store.search(self._embeddings.embed([query])[0], self._top_k, self._min_score)
+        results: list[RetrievalResult] = self._vector_store.search(query, self._embeddings.embed([query])[0], self._top_k, self._min_score)
         return {"results": results, "message": "evidence found" if results else "no relevant evidence found"}

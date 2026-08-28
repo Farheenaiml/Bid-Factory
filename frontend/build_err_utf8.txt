@@ -1,0 +1,30 @@
+﻿
+> frontend@0.0.0 build
+> tsc -b && vite build
+
+src/App.tsx(4,8): error TS6133: 'React' is declared but its value is never read.
+src/pages/BidDetail.tsx(1,8): error TS6133: 'React' is declared but its value is never read.
+src/pages/BidDetail.tsx(31,9): error TS6133: 'conflicts' is declared but its value is never read.
+src/pages/BidDetail.tsx(131,100): error TS2339: Property 'confidence' does not exist on type 'ReviewItem'.
+src/pages/BidDetail.tsx(134,85): error TS2339: Property 'supporting_evidence' does not exist on type 'ReviewItem'.
+src/pages/BidDetail.tsx(136,50): error TS2339: Property 'supporting_evidence' does not exist on type 'ReviewItem'.
+src/pages/BidDetail.tsx(136,75): error TS7006: Parameter 'ev' implicitly has an 'any' type.
+src/pages/BidDetail.tsx(136,79): error TS7006: Parameter 'i' implicitly has an 'any' type.
+src/pages/Bids.tsx(1,8): error TS6133: 'React' is declared but its value is never read.
+src/pages/Dashboard.tsx(1,8): error TS6133: 'React' is declared but its value is never read.
+src/pages/KnowledgeBase.tsx(1,8): error TS6133: 'React' is declared but its value is never read.
+src/pages/KnowledgeBase.tsx(8,12): error TS6133: 'stats' is declared but its value is never read.
+src/pages/KnowledgeBase.tsx(8,19): error TS6133: 'setStats' is declared but its value is never read.
+src/pages/NewRfp.tsx(1,35): error TS6133: 'useEffect' is declared but its value is never read.
+src/pages/Reviews.tsx(1,8): error TS6133: 'React' is declared but its value is never read.
+src/pages/Reviews.tsx(3,1): error TS6192: All imports in import declaration are unused.
+src/pages/Reviews.tsx(7,12): error TS6133: 'reqs' is declared but its value is never read.
+src/pages/Reviews.tsx(7,18): error TS6133: 'setReqs' is declared but its value is never read.
+src/pages/Reviews.tsx(30,43): error TS2339: Property 'review_status' does not exist on type 'ReviewItem'.
+src/pages/Reviews.tsx(55,86): error TS2339: Property 'review_status' does not exist on type 'ReviewItem'.
+src/pages/Reviews.tsx(71,80): error TS2339: Property 'review_status' does not exist on type 'ReviewItem'.
+src/pages/Reviews.tsx(79,113): error TS2339: Property 'confidence' does not exist on type 'ReviewItem'.
+src/pages/Reviews.tsx(84,127): error TS2339: Property 'supporting_evidence' does not exist on type 'ReviewItem'.
+src/pages/Reviews.tsx(86,49): error TS2339: Property 'supporting_evidence' does not exist on type 'ReviewItem'.
+src/pages/Reviews.tsx(86,75): error TS7006: Parameter 'ev' implicitly has an 'any' type.
+src/pages/Reviews.tsx(86,79): error TS7006: Parameter 'i' implicitly has an 'any' type.

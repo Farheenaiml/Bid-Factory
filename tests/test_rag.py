@@ -100,7 +100,8 @@ def test_retrieval_returns_relevant_evidence_and_metadata(tmp_path: Path) -> Non
     assert result.document_name == "security.docx"
     assert result.source_path == str(path.resolve())
     assert result.section == "Security"
-    assert result.similarity_score == 1.0
+    assert result.similarity_score >= 0.7
+    assert "hybrid_scores" in result.metadata
     assert result.metadata["document_type"] == "docx"
 
 

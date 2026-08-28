@@ -50,17 +50,23 @@ class BidAnalysisOrchestrator:
                 proposed = self._response_generation.generate(extraction.requirements, compliance_results)
                 proposed_responses = proposed.responses
                 if self._review is not None:
-                    review_ids = [
-                        str(self._review.create_pending(
+                    review_ids = []
+                    for response in proposed_responses:
+                        # Find matching compliance result to pull conflict_analysis securely
+                        matching_cr = next((cr for cr in compliance_results if cr.requirement.requirement_id == response.requirement_id), None)
+                        conflict = None
+                        if matching_cr and hasattr(matching_cr, 'conflict_analysis') and matching_cr.conflict_analysis:
+                            conflict = matching_cr.conflict_analysis.model_dump()
+                        
+                        review_ids.append(str(self._review.create_pending(
                             bid_id=bid.bid_id,
                             requirement_id=response.requirement_id,
                             proposed_response=response.proposed_response,
                             compliance_status=response.compliance_status,
                             confidence=response.confidence,
                             supporting_evidence=response.supporting_evidence,
-                        ).review_id)
-                        for response in proposed_responses
-                    ]
+                            conflict_analysis=conflict
+                        ).review_id))
             bid.processing_status = ProcessingStatus.completed
             return BidAnalysisResult(
                 bid_id=bid.bid_id,
@@ -72,8 +78,8 @@ class BidAnalysisOrchestrator:
                 source_metadata=segments,
                 extraction_mode=extraction_mode,
             )
-        except RocketRideServiceError:
-            return self._failed(bid, "RocketRide pipeline execution failed.")
+        except RocketRideServiceError as exc:
+            return self._failed(bid, str(exc))
         except (PipelineOutputError, ValueError, TypeError) as exc:
             return self._failed(bid, str(exc))
         except Exception:
