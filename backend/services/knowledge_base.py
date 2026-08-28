@@ -34,7 +34,11 @@ class KnowledgeBaseService:
     def ingest_file(self, path: str | Path) -> KnowledgeBaseDocument:
         document_path = Path(path)
         if not document_path.is_absolute():
-            document_path = self.knowledge_base_dir / document_path
+            # Only prepend knowledge_base_dir if the path isn't already inside it
+            try:
+                document_path.relative_to(self.knowledge_base_dir)
+            except ValueError:
+                document_path = self.knowledge_base_dir / document_path
         document = self._ingestion.extract(document_path)
         chunks = self._chunking.create_chunks(document)
         if self._vector_store.has_document(document.document_hash):

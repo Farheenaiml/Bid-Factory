@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { API, Bid, Requirement, ReviewItem } from '../api';
 import { FileText, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { PieChart, Pie, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import ReactMarkdown from 'react-markdown';
 
 const BidDetail = () => {
     const { bidId } = useParams();
@@ -67,9 +69,13 @@ const BidDetail = () => {
                     <h2 className="mb-2">BID WORKSPACE: {bid.rfp.title}</h2>
                     <p className="text-muted text-sm">Document: {bid.rfp.filename} • Uploaded: {new Date(bid.rfp.uploaded_at).toLocaleString()}</p>
                 </div>
-                <span className={`badge badge-${bid.processing_status === 'completed' ? 'success' : bid.processing_status === 'failed' ? 'error' : 'info'}`}>
-                    {bid.processing_status.toUpperCase()}
-                </span>
+                <div className="flex gap-4 items-center">
+                    <span className={`badge badge-${bid.processing_status === 'completed' ? 'success' : bid.processing_status === 'failed' ? 'error' : 'info'}`}>
+                        {bid.processing_status.toUpperCase()}
+                    </span>
+                    <a href={`/api/bids/${bid.bid_id}/export/docx`} download className="btn btn-primary text-sm">Export DOCX</a>
+                    <a href={`/api/bids/${bid.bid_id}/export/csv`} download className="btn btn-outline text-sm">Export CSV</a>
+                </div>
             </div>
 
             <div className="tabs">
@@ -97,6 +103,39 @@ const BidDetail = () => {
                         <div className="metric-card">
                             <div className="metric-title flex gap-2 items-center"><AlertTriangle size={16} /> Reviews Pending</div>
                             <div className="metric-value text-warning" style={{ color: 'var(--status-warning)' }}>{reviews.filter(r => r.review_status === 'PENDING').length}</div>
+                        </div>
+                    </div>
+
+                    <div className="flex gap-6 mb-6">
+                        <div className="card flex-1">
+                            <h3 className="text-sm text-muted font-semibold mb-4">Compliance Breakdown</h3>
+                            {reqs.length > 0 ? (
+                                <div style={{ width: '100%', height: '250px' }}>
+                                    <ResponsiveContainer>
+                                        <PieChart>
+                                            <Pie
+                                                data={[
+                                                    { name: 'Covered', value: complianceMap.covered, fill: 'var(--status-success)' },
+                                                    { name: 'Partial', value: complianceMap.partially_covered, fill: 'var(--status-warning)' },
+                                                    { name: 'Not Found', value: complianceMap.not_found, fill: 'var(--status-error)' },
+                                                    { name: 'Needs Review', value: complianceMap.needs_human_review, fill: 'var(--status-info)' },
+                                                ].filter(d => d.value > 0)}
+                                                dataKey="value"
+                                                nameKey="name"
+                                                cx="50%"
+                                                cy="50%"
+                                                innerRadius={60}
+                                                outerRadius={80}
+                                                label
+                                            />
+                                            <Tooltip />
+                                            <Legend verticalAlign="bottom" height={36} />
+                                        </PieChart>
+                                    </ResponsiveContainer>
+                                </div>
+                            ) : (
+                                <div className="text-muted text-sm flex items-center justify-center h-full">Processing data...</div>
+                            )}
                         </div>
                     </div>
 
@@ -215,24 +254,37 @@ const BidDetail = () => {
                                             {rev.supporting_evidence.length === 0 && <p className="text-muted text-sm italic">No supporting company evidence was found.</p>}
                                             <div className="flex-col gap-4">
                                                 {rev.supporting_evidence.map((ev, i) => (
-                                                    <div key={i} className="p-4 border rounded-md">
-                                                        <div className="flex justify-between items-start mb-2">
-                                                            <div className="font-semibold text-sm" style={{ color: 'var(--primary-color)' }}>{ev.document_name}</div>
+                                                    <div key={i} className="p-4 border rounded-md relative overflow-hidden">
+                                                        <div style={{ position: 'absolute', top: 0, left: 0, height: '3px', width: `${Math.min(100, Math.max(0, ev.similarity_score * 100))}%`, background: 'var(--primary-color)', transition: 'width 1s ease-out' }} />
+                                                        <div className="flex justify-between items-start mb-2 mt-1">
+                                                            <div className="font-semibold text-sm" style={{ color: 'var(--text-main)' }}>{ev.document_name}</div>
+                                                            <div className="badge badge-neutral bg-gray-100" style={{ background: 'rgba(0,0,0,0.05)' }}>Match: {(ev.similarity_score * 100).toFixed(0)}%</div>
                                                         </div>
-                                                        <div className="flex gap-4 text-xs text-muted mb-3 opacity-50">
+                                                        <div className="flex gap-4 text-xs text-muted mb-3">
                                                             <span>Page: {ev.page_number || 'N/A'}</span>
-                                                            <span>Section: {ev.section || 'Unknown'}</span>
+                                                            <span>| Section: {ev.section || 'Unknown'}</span>
                                                         </div>
-                                                        <p className="text-sm mb-3">"{ev.retrieved_text}"</p>
-                                                        <div className="flex gap-3 text-xs text-muted border-t pt-2">
-                                                            <span>Combined Sim: {ev.similarity_score.toFixed(2)}</span>
-                                                            {ev.metadata?.hybrid_scores && (
-                                                                <>
-                                                                    <span>Semantic: {ev.metadata.hybrid_scores.semantic?.toFixed(2)}</span>
-                                                                    <span>Lexical: {ev.metadata.hybrid_scores.lexical?.toFixed(2)}</span>
-                                                                </>
-                                                            )}
-                                                        </div>
+                                                        <p className="text-sm mb-4 p-3 bg-gray-50 rounded italic border-l-2" style={{ borderLeftColor: 'var(--primary-color)' }}>"{ev.retrieved_text}"</p>
+
+                                                        {ev.metadata?.hybrid_scores && (
+                                                            <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-gray-100">
+                                                                <div className="text-xs font-semibold text-muted mb-1">HYBRID RAG VECTOR MAPPING</div>
+                                                                <div className="flex items-center gap-3">
+                                                                    <div className="text-xs text-muted" style={{ width: '60px' }}>Semantic</div>
+                                                                    <div style={{ flex: 1, height: '6px', background: '#e5e7eb', borderRadius: '3px', overflow: 'hidden' }}>
+                                                                        <div style={{ width: `${Math.min(100, Math.max(0, ev.metadata.hybrid_scores.semantic * 100))}%`, height: '100%', background: '#8b5cf6' }}></div>
+                                                                    </div>
+                                                                    <div className="text-xs font-mono">{(ev.metadata.hybrid_scores.semantic * 100).toFixed(0)}%</div>
+                                                                </div>
+                                                                <div className="flex items-center gap-3">
+                                                                    <div className="text-xs text-muted" style={{ width: '60px' }}>Lexical</div>
+                                                                    <div style={{ flex: 1, height: '6px', background: '#e5e7eb', borderRadius: '3px', overflow: 'hidden' }}>
+                                                                        <div style={{ width: `${Math.min(100, Math.max(0, ev.metadata.hybrid_scores.lexical * 100))}%`, height: '100%', background: '#3b82f6' }}></div>
+                                                                    </div>
+                                                                    <div className="text-xs font-mono">{(ev.metadata.hybrid_scores.lexical * 100).toFixed(0)}%</div>
+                                                                </div>
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 ))}
                                             </div>
@@ -267,7 +319,7 @@ const BidDetail = () => {
                                         {rev.review_status === 'PENDING' && (
                                             <div className="flex gap-2">
                                                 <button onClick={() => handleReviewAction(rev.review_id, 'approve')} className="btn" style={{ background: '#10b981', color: 'white', border: 'none', padding: '0.4rem 0.8rem', borderRadius: '4px', fontSize: '0.85rem' }}>Approve</button>
-                                                <button onClick={() => handleReviewAction(rev.review_id, 'edit')} className="btn btn-primary" style={{ padding: '0.4rem 0.8rem', borderRadius: '4px', fontSize: '0.85rem' }}>Edit</button>
+                                                <button onClick={() => handleReviewAction(rev.review_id, 'needs-revision')} className="btn btn-primary" style={{ padding: '0.4rem 0.8rem', borderRadius: '4px', fontSize: '0.85rem' }}>Revise</button>
                                                 <button onClick={() => handleReviewAction(rev.review_id, 'reject')} className="btn" style={{ background: '#ef4444', color: 'white', border: 'none', padding: '0.4rem 0.8rem', borderRadius: '4px', fontSize: '0.85rem' }}>Reject</button>
                                             </div>
                                         )}
@@ -285,7 +337,13 @@ const BidDetail = () => {
                                         )}
                                     </div>
                                     <div className="p-4 rounded-md mb-4" style={{ background: '#f9fafb', border: '1px solid #f3f4f6', color: '#374151', lineHeight: '1.6', fontSize: '0.95rem' }}>
-                                        {rev.proposed_response || <em style={{ color: '#9ca3af' }}>No response generated.</em>}
+                                        {rev.proposed_response ? (
+                                            <div className="markdown-body text-sm text-gray-800" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                                <ReactMarkdown>{rev.proposed_response}</ReactMarkdown>
+                                            </div>
+                                        ) : (
+                                            <em style={{ color: '#9ca3af' }}>No response generated.</em>
+                                        )}
                                     </div>
 
                                     {rev.supporting_evidence && rev.supporting_evidence.length > 0 && (

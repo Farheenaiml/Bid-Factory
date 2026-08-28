@@ -40,7 +40,7 @@ class ReviewAuditEntry(BaseModel):
 
 
 class ReviewCommentRequest(BaseModel):
-    reviewer_comment: str = Field(min_length=1, max_length=5000)
+    reviewer_comment: str = Field(default="No comment provided", max_length=5000)
     reviewer: str | None = Field(default=None, max_length=255)
 
 

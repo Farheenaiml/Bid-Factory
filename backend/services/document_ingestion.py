@@ -7,7 +7,7 @@ from fastapi import HTTPException, status
 from pydantic import BaseModel, Field
 
 
-SUPPORTED_EXTENSIONS = {".pdf", ".docx"}
+SUPPORTED_EXTENSIONS = {".pdf", ".docx", ".png", ".jpg", ".jpeg"}
 
 
 class ExtractedDocument(BaseModel):
@@ -24,7 +24,7 @@ class DocumentIngestionService:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Knowledge-base file was not found.")
         extension = path.suffix.lower()
         if extension not in SUPPORTED_EXTENSIONS:
-            raise HTTPException(status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, detail="Only PDF and DOCX files are supported.")
+            raise HTTPException(status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, detail="Unsupported file format.")
         contents = path.read_bytes()
         if not contents:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Knowledge-base document is empty.")
@@ -32,6 +32,9 @@ class DocumentIngestionService:
         if extension == ".pdf":
             pages = self._extract_pdf(contents)
             document_type = "pdf"
+        elif extension in {".png", ".jpg", ".jpeg"}:
+            pages = self._extract_image(contents)
+            document_type = "image"
         else:
             pages = self._extract_docx(contents)
             document_type = "docx"
@@ -56,6 +59,26 @@ class DocumentIngestionService:
             raise
         except Exception as exc:
             raise HTTPException(status_code=422, detail="Unable to extract text from PDF document.") from exc
+
+    @staticmethod
+    def _extract_image(contents: bytes) -> list[dict[str, Any]]:
+        try:
+            from PIL import Image
+            import pytesseract
+            import sys
+            
+            if sys.platform == 'win32':
+                pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
+            image = Image.open(io.BytesIO(contents))
+            # Extract real text dynamically
+            text = pytesseract.image_to_string(image)
+                
+            return [{"text": text or "", "page_number": 1, "section": None}]
+        except Exception as exc:
+            import traceback
+            traceback.print_exc()
+            raise HTTPException(status_code=422, detail="Unable to extract text from Image using real OCR.") from exc
 
     @staticmethod
     def _extract_docx(contents: bytes) -> list[dict[str, Any]]:

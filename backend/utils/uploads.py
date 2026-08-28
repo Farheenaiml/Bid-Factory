@@ -9,6 +9,9 @@ ALLOWED_FILE_TYPES = {
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         "application/octet-stream",
     },
+    ".png": {"image/png"},
+    ".jpg": {"image/jpeg"},
+    ".jpeg": {"image/jpeg"},
 }
 
 
@@ -46,4 +49,6 @@ async def read_and_validate_upload(file: UploadFile, max_size: int) -> tuple[byt
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="The upload is not a valid PDF file.")
     if file_type == "docx" and not contents.startswith(b"PK"):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="The upload is not a valid DOCX file.")
+    if file_type in ["png", "jpg", "jpeg"]:
+        pass # allow image headers
     return contents, file_type

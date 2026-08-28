@@ -50,6 +50,7 @@ export interface ProposedResponse {
 
 export interface ReviewItem {
     review_id: string;
+    bid_id: string;
     requirement_id: string;
     proposed_response: string;
     compliance_status: string;

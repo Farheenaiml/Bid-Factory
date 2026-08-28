@@ -72,7 +72,9 @@ class ResponseGenerationService:
             )
             needs_human_review = True
         else:
-            proposed_response = "The available company evidence is ambiguous for this requirement; human review is required before responding."
+            # Fallback for ambiguous/needs_human_review but we DO have evidence
+            statements = " ".join(item.retrieved_text for item in evidence)
+            proposed_response = self._draft_with_llm(statements, "The evidence is ambiguous. Draft the best response you can, but note that it requires human review.")
             needs_human_review = True
         return RequirementResponse(
             requirement_id=str(compliance.requirement.requirement_id),
@@ -86,15 +88,39 @@ class ResponseGenerationService:
 
     @staticmethod
     def _covered_response(evidence: list[RetrievalResult]) -> str:
-        references = "; ".join(ResponseGenerationService._reference(item) for item in evidence)
         statements = " ".join(item.retrieved_text for item in evidence)
-        return f"Based on the available company evidence, the proposed response is: {statements} Supporting references: {references}."
+        return ResponseGenerationService._draft_with_llm(statements, "This requirement is fully covered based on our documentation.")
 
     @staticmethod
     def _partial_response(evidence: list[RetrievalResult]) -> str:
-        references = "; ".join(ResponseGenerationService._reference(item) for item in evidence)
         statements = " ".join(item.retrieved_text for item in evidence)
-        return f"The available company evidence supports the following limited response: {statements} The remaining requirement details are not established by the available evidence and require human confirmation. Supporting references: {references}."
+        return ResponseGenerationService._draft_with_llm(statements, "This requirement is only partially covered based on our documentation. Emphasize what we DO have.")
+        
+    @staticmethod
+    def _draft_with_llm(evidence_text: str, context: str) -> str:
+        import os
+        import groq
+        try:
+            g_client = groq.Groq(api_key=os.getenv("ROCKETRIDE_GROQ_KEY"))
+            completion = g_client.chat.completions.create(
+                model="openai/gpt-oss-20b",
+                messages=[
+                    {
+                        "role": "system",
+                        "content": f"You are a professional B2B RFP proposal writer. You will be provided with internal company evidence. Write a highly professional, definitive, and persuasive response to the requirement based strictly on the provided evidence. DO NOT make up information. {context}"
+                    },
+                    {
+                        "role": "user",
+                        "content": evidence_text[:10000]
+                    }
+                ],
+                temperature=0.2,
+                max_tokens=500,
+            )
+            return completion.choices[0].message.content
+        except Exception as e:
+            print("Groq API error in generation:", e)
+            return f"Based on the available evidence: {evidence_text}"
 
     @staticmethod
     def _reference(evidence: RetrievalResult) -> str:

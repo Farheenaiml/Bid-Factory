@@ -27,6 +27,9 @@ register_exception_handlers(app)
 app.include_router(router, prefix="/api")
 app.include_router(knowledge_base_router, prefix="/api")
 
+from backend.api.chat import router as chat_router
+app.include_router(chat_router, prefix="/api")
+
 
 @app.get("/api/health", tags=["system"])
 def health() -> dict[str, str]:

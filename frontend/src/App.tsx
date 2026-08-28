@@ -10,6 +10,7 @@ import NewRfp from './pages/NewRfp';
 import KnowledgeBase from './pages/KnowledgeBase';
 import Reviews from './pages/Reviews';
 import BidDetail from './pages/BidDetail';
+import { Chatbot } from './components/Chatbot';
 
 const Sidebar = () => {
   const location = useLocation();
@@ -110,6 +111,7 @@ function App() {
             </Routes>
           </main>
         </div>
+        <Chatbot />
       </div>
     </BrowserRouter>
   );

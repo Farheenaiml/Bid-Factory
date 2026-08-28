@@ -1,6 +1,8 @@
 from uuid import UUID
 
 from fastapi import APIRouter, File, Form, UploadFile, status
+from fastapi.responses import StreamingResponse
+import io
 
 from backend.models.entities import Bid, Requirement, Review
 from backend.schemas.requests import ReviewRequest
@@ -15,6 +17,7 @@ from backend.utils.uploads import read_and_validate_upload
 from backend.services.response_generation import response_generation_service
 from backend.services.review import ReviewService
 from backend.services.orchestration import bid_analysis_orchestrator
+from backend.services.export_service import export_service
 
 
 router = APIRouter()
@@ -139,6 +142,38 @@ def generate_proposed_responses(bid_id: UUID, request: ProposedResponseRequest) 
     ]
     response.review_ids = review_ids
     return response
+
+
+@router.get("/bids/{bid_id}/export/docx", tags=["bids"])
+def export_bid_docx(bid_id: UUID) -> StreamingResponse:
+    content = export_service.generate_docx(bid_id)
+    return StreamingResponse(
+        io.BytesIO(content),
+        media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        headers={"Content-Disposition": f"attachment; filename=bid_{bid_id}_compiled.docx"}
+    )
+
+@router.get("/bids/{bid_id}/export/csv", tags=["bids"])
+def export_bid_csv(bid_id: UUID) -> StreamingResponse:
+    content = export_service.generate_csv(bid_id)
+    return StreamingResponse(
+        io.BytesIO(content),
+        media_type="text/csv",
+        headers={"Content-Disposition": f"attachment; filename=compliance_matrix_{bid_id}.csv"}
+    )
+
+from fastapi.responses import FileResponse
+import os
+
+@router.get("/download/demo-docx")
+def download_demo_docx():
+    path = os.path.join(os.getcwd(), "demo_assets", "Golden_Demo_RFP.docx")
+    return FileResponse(path, filename="Golden_Demo_RFP.docx")
+
+@router.get("/download/demo-image")
+def download_demo_image():
+    path = os.path.join(os.getcwd(), "demo_assets", "Scanned_RFP_Table.png")
+    return FileResponse(path, filename="Scanned_RFP_Table.png")
 
 
 @router.get("/bids/{bid_id}/reviews", response_model=ReviewCollectionResponse, tags=["reviews"])
