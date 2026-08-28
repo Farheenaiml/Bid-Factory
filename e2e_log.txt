@@ -1,3 +1,0 @@
-Uploaded bid: 346b43b6-a688-4ae7-af5d-875d204268d1
-Analysis status_code: 200
-FAILED. Errors: ['RocketRide pipeline execution failed.']
