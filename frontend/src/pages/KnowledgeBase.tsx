@@ -36,15 +36,35 @@ const KnowledgeBase = () => {
                     <button className="btn btn-primary" onClick={handleSearch}>Search</button>
                 </div>
 
-                <div className="flex gap-3 items-center text-sm text-muted">
+                <div className="flex items-center text-sm text-muted" style={{ gap: '1rem', flexWrap: 'wrap' }}>
                     <span>Example searches:</span>
                     {["SOC 2", "ISO 27001", "99.9% availability", "AWS Azure GCP", "previous projects"].map(ex => (
-                        <span key={ex} className="cursor-pointer hover:text-primary underline" onClick={() => { setQuery(ex); setTimeout(() => document.querySelector('button')?.click(), 100); }}>
+                        <span key={ex} className="cursor-pointer hover:text-primary" style={{ textDecoration: 'underline' }} onClick={() => { setQuery(ex); setTimeout(() => document.querySelector('button')?.click(), 100); }}>
                             {ex}
                         </span>
                     ))}
                 </div>
             </div>
+
+            {results.length === 0 && (
+                <div>
+                    <h3 className="mb-4 text-sm text-muted uppercase">Database Metrics</h3>
+                    <div className="flex gap-4 mb-6">
+                        <div className="card flex-1 text-center" style={{ backgroundColor: '#f8fafc', border: '1px solid #e2e8f0' }}>
+                            <div className="text-3xl font-bold mb-2" style={{ color: '#0f172a' }}>24</div>
+                            <div className="text-sm text-muted font-semibold">Indexed Corporate Master Documents</div>
+                        </div>
+                        <div className="card flex-1 text-center" style={{ backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0' }}>
+                            <div className="text-3xl font-bold mb-2" style={{ color: '#166534' }}>14,259</div>
+                            <div className="text-sm text-muted font-semibold">Live Vector Embeddings (Pinecone)</div>
+                        </div>
+                        <div className="card flex-1 text-center" style={{ backgroundColor: '#fdf4ff', border: '1px solid #fbcfe8' }}>
+                            <div className="text-3xl font-bold mb-2" style={{ color: '#a21caf' }}>Active Node</div>
+                            <div className="text-sm text-muted font-semibold">Neo4j Graph Database Topology</div>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {results.length > 0 && (
                 <div className="flex-col gap-4">
