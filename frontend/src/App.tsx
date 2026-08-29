@@ -2,6 +2,8 @@
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { LayoutDashboard, FileText, Upload, BookOpen, CheckSquare, Settings, Activity } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+import { auth } from './firebase';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 
 // Pages
 import Dashboard from './pages/Dashboard';
@@ -32,6 +34,10 @@ const Sidebar = () => {
     { name: 'Reviews', path: '/reviews', icon: CheckSquare },
   ];
 
+  const handleLogout = () => {
+    signOut(auth);
+  };
+
   return (
     <aside className="sidebar">
       <div className="sidebar-header" style={{ flexDirection: 'column', alignItems: 'flex-start', padding: '1.5rem', height: 'auto', gap: '0.25rem' }}>
@@ -54,16 +60,16 @@ const Sidebar = () => {
       </nav>
 
       <div className="sidebar-footer">
-        <div className="flex items-center gap-2 mb-4 cursor-pointer hover:text-primary transition-colors">
+        <div className="flex items-center gap-2 mb-4 cursor-pointer hover:text-primary transition-colors" onClick={handleLogout}>
           <Settings size={18} />
-          Settings
+          Logout
         </div>
         <div style={{ fontWeight: 600, marginBottom: '0.5rem', color: 'var(--text-main)', fontSize: '0.75rem' }}>System Status</div>
-        <div className="system-status">
-          <div className={`status-indicator ${!apiConnected ? 'offline' : ''}`} />
-          <span className="text-muted" style={{ fontSize: '0.75rem' }}>
-            {apiConnected ? 'RocketRide & Backend Connected' : 'Backend Unavailable'}
-          </span>
+        <div className="text-xs text-muted flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="status-dot" style={{ background: apiConnected ? 'var(--status-success)' : 'var(--status-error)' }}></span>
+            <span>RocketRide & Backend Connected</span>
+          </div>
         </div>
       </div>
     </aside>
@@ -74,9 +80,9 @@ const TopBar = () => {
   const location = useLocation();
 
   const getTitle = () => {
-    if (location.pathname === '/') return 'Bid Intelligence Dashboard';
-    if (location.pathname.startsWith('/bids/')) return 'Bid Details';
-    if (location.pathname === '/bids') return 'All Bids';
+    if (location.pathname === '/') return 'Command Center';
+    if (location.pathname === '/bids') return 'Active Pipelines';
+    if (location.pathname.startsWith('/bids/')) return 'Workspace';
     if (location.pathname === '/new-rfp') return 'New RFP Analysis';
     if (location.pathname === '/kb') return 'Knowledge Base';
     if (location.pathname === '/reviews') return 'Human Reviews';
@@ -88,40 +94,59 @@ const TopBar = () => {
       <div className="page-title">{getTitle()}</div>
       <div className="flex items-center gap-4">
         {/* Placeholder for user/notifications */}
-        <div className="badge badge-neutral">Demo User</div>
+        <div className="badge badge-neutral">{auth.currentUser?.email || 'Logged In'}</div>
       </div>
     </header>
   );
 };
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    localStorage.getItem('bidfactory_auth') === 'true'
-  );
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
-  if (!isAuthenticated) {
-    return <Login onLogin={() => setIsAuthenticated(true)} />;
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+  // Show loading spinner or blank while Firebase checks session
+  if (isAuthenticated === null) {
+    return <div style={{ display: 'flex', height: '100vh', justifyContent: 'center', alignItems: 'center' }}>Loading Enterprise Auth...</div>;
   }
 
   return (
     <BrowserRouter>
-      <div className="app-container">
-        <Sidebar />
-        <div className="main-content">
-          <TopBar />
-          <main className="content-area">
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/bids" element={<Bids />} />
-              <Route path="/bids/:bidId" element={<BidDetail />} />
-              <Route path="/new-rfp" element={<NewRfp />} />
-              <Route path="/kb" element={<KnowledgeBase />} />
-              <Route path="/reviews" element={<Reviews />} />
-            </Routes>
-          </main>
+      {!isAuthenticated ? (
+        <Routes>
+          {/* If not authed, the dashboard acts as a public landing page basically? 
+                 Actually, just route them to Login. */}
+          <Route path="*" element={<Login />} />
+        </Routes>
+      ) : (
+        <div className="app-container">
+          <Sidebar />
+          <div className="main-content">
+            <TopBar />
+            <main className="content-area">
+              <Routes>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/bids" element={<Bids />} />
+                <Route path="/bids/:bidId" element={<BidDetail />} />
+                <Route path="/new-rfp" element={<NewRfp />} />
+                <Route path="/kb" element={<KnowledgeBase />} />
+                <Route path="/reviews" element={<Reviews />} />
+                <Route path="*" element={<Dashboard />} />
+              </Routes>
+            </main>
+          </div>
+          <Chatbot />
         </div>
-        <Chatbot />
-      </div>
+      )}
     </BrowserRouter>
   );
 }
