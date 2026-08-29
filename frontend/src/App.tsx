@@ -1,6 +1,5 @@
-// App.tsx
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, FileText, Upload, BookOpen, CheckSquare, Settings, Activity } from 'lucide-react';
+import { LayoutDashboard, FileText, Upload, BookOpen, CheckSquare, LogOut, Activity } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { auth } from './firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
@@ -35,10 +34,6 @@ const Sidebar = () => {
     { name: 'Reviews', path: '/reviews', icon: CheckSquare },
   ];
 
-  const handleLogout = () => {
-    signOut(auth);
-  };
-
   return (
     <aside className="sidebar">
       <div className="sidebar-header" style={{ flexDirection: 'column', alignItems: 'flex-start', padding: '1.5rem', height: 'auto', gap: '0.25rem' }}>
@@ -61,8 +56,8 @@ const Sidebar = () => {
       </nav>
 
       <div className="sidebar-footer">
-        <div className="flex items-center gap-2 mb-4 cursor-pointer hover:text-primary transition-colors" onClick={handleLogout}>
-          <Settings size={18} />
+        <div className="flex items-center gap-2 mb-4 cursor-pointer hover:text-primary transition-colors" onClick={() => signOut(auth).then(() => window.location.href = '/')}>
+          <LogOut size={18} />
           Logout
         </div>
         <div style={{ fontWeight: 600, marginBottom: '0.5rem', color: 'var(--text-main)', fontSize: '0.75rem' }}>System Status</div>
@@ -96,6 +91,13 @@ const TopBar = () => {
       <div className="flex items-center gap-4">
         {/* Placeholder for user/notifications */}
         <div className="badge badge-neutral">{auth.currentUser?.email || 'Logged In'}</div>
+        <button
+          onClick={() => signOut(auth).then(() => window.location.href = '/')}
+          className="btn btn-outline"
+          style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem' }}
+        >
+          Sign Out
+        </button>
       </div>
     </header>
   );
