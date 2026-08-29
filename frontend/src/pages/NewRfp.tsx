@@ -79,7 +79,7 @@ const NewRfp = () => {
                     >
                         <UploadCloud size={48} className="text-primary mb-4" style={{ margin: '0 auto' }} />
                         <h3>Click to browse or drag file here</h3>
-                        <p className="text-muted mt-2">Supports .docx, .pdf, .png, .jpg (Max 10MB)</p>
+                        <p className="text-muted mt-2">Supports .docx, .pdf, .png, .jpg (Max 25MB Server Limit)</p>
                         <input
                             type="file"
                             multiple

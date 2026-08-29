@@ -11,6 +11,7 @@ import KnowledgeBase from './pages/KnowledgeBase';
 import Reviews from './pages/Reviews';
 import BidDetail from './pages/BidDetail';
 import { Chatbot } from './components/Chatbot';
+import Login from './pages/Login';
 
 const Sidebar = () => {
   const location = useLocation();
@@ -94,6 +95,14 @@ const TopBar = () => {
 };
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    localStorage.getItem('bidfactory_auth') === 'true'
+  );
+
+  if (!isAuthenticated) {
+    return <Login onLogin={() => setIsAuthenticated(true)} />;
+  }
+
   return (
     <BrowserRouter>
       <div className="app-container">

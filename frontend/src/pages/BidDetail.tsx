@@ -129,6 +129,22 @@ const BidDetail = () => {
                         </div>
                     </div>
 
+                    {/* Feature 1: Instantly display the Fetched Requirements on the frontend overview */}
+                    <h3 className="mb-4 mt-8 text-sm text-muted">EXTRACTED REQUIREMENTS (FETCHED FROM DOC)</h3>
+                    <div className="card mb-8">
+                        {reqs.length === 0 ? (
+                            <p className="text-muted text-sm">Processing... extracting requirements from document.</p>
+                        ) : (
+                            <ul style={{ listStyleType: 'disc', paddingLeft: '1.5rem', margin: 0 }}>
+                                {reqs.map((req, index) => (
+                                    <li key={req.requirement_id || index} className="mb-2 text-sm" style={{ color: 'var(--text-color)' }}>
+                                        {req.requirement_text}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+
                     <div className="flex gap-6 mb-6">
                         <div className="card flex-1">
                             <h3 className="text-sm text-muted font-semibold mb-4">Compliance Breakdown</h3>
