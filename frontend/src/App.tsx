@@ -14,6 +14,7 @@ import Reviews from './pages/Reviews';
 import BidDetail from './pages/BidDetail';
 import { Chatbot } from './components/Chatbot';
 import Login from './pages/Login';
+import LandingPage from './pages/LandingPage';
 
 const Sidebar = () => {
   const location = useLocation();
@@ -123,9 +124,9 @@ function App() {
     <BrowserRouter>
       {!isAuthenticated ? (
         <Routes>
-          {/* If not authed, the dashboard acts as a public landing page basically? 
-                 Actually, just route them to Login. */}
-          <Route path="*" element={<Login />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="*" element={<LandingPage />} />
         </Routes>
       ) : (
         <div className="app-container">
