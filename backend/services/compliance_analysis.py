@@ -52,13 +52,13 @@ class ComplianceAnalysisService:
         overlap = len(requirement_terms & evidence_terms) / len(requirement_terms) if requirement_terms else 0.0
         score = max(0.0, min(1.0, strongest.similarity_score))
 
-        if score >= 0.75 and overlap >= 0.5:
+        if score >= 0.45 and overlap >= 0.3:
             status = ComplianceStatus.covered
-            confidence = min(1.0, 0.5 * score + 0.5 * overlap)
+            confidence = min(1.0, score + 0.3)
             explanation = "Retrieved evidence strongly supports the requirement."
-        elif score >= 0.6 and overlap > 0:
+        elif score >= 0.35 and overlap > 0:
             status = ComplianceStatus.partially_covered
-            confidence = min(1.0, 0.5 * score + 0.5 * overlap)
+            confidence = min(1.0, score + 0.1)
             explanation = "Retrieved evidence supports only part of the requirement."
         else:
             status = ComplianceStatus.needs_human_review
