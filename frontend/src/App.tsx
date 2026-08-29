@@ -65,11 +65,11 @@ const Sidebar = () => {
           Logout
         </div>
         <div style={{ fontWeight: 600, marginBottom: '0.5rem', color: 'var(--text-main)', fontSize: '0.75rem' }}>System Status</div>
-        <div className="text-xs text-muted flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="status-dot" style={{ background: apiConnected ? 'var(--status-success)' : 'var(--status-error)' }}></span>
-            <span>RocketRide & Backend Connected</span>
-          </div>
+        <div className="system-status">
+          <div className={`status-indicator ${!apiConnected ? 'offline' : ''}`} />
+          <span className="text-muted" style={{ fontSize: '0.75rem' }}>
+            {apiConnected ? 'RocketRide & Backend Connected' : 'Backend Unavailable'}
+          </span>
         </div>
       </div>
     </aside>
