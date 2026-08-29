@@ -4,6 +4,7 @@ import { API, Bid, Requirement, ReviewItem } from '../api';
 import { FileText, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { PieChart, Pie, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 const BidDetail = () => {
     const { bidId } = useParams();
@@ -378,7 +379,7 @@ const BidDetail = () => {
                                     <div className="p-4 rounded-md mb-4" style={{ background: '#f9fafb', border: '1px solid #f3f4f6', color: '#374151', lineHeight: '1.6', fontSize: '0.95rem' }}>
                                         {rev.proposed_response ? (
                                             <div className="markdown-body text-sm text-gray-800" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                                <ReactMarkdown>{rev.proposed_response}</ReactMarkdown>
+                                                <ReactMarkdown remarkPlugins={[remarkGfm]}>{rev.proposed_response}</ReactMarkdown>
                                             </div>
                                         ) : (
                                             <em style={{ color: '#9ca3af' }}>No response generated.</em>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MessageCircle, X, Send } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 export const Chatbot = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -55,7 +56,7 @@ export const Chatbot = () => {
                             <div key={i} style={{ alignSelf: m.role === 'user' ? 'flex-end' : 'flex-start', backgroundColor: m.role === 'user' ? 'var(--primary-color)' : 'white', color: m.role === 'user' ? 'white' : 'black', padding: '8px 12px', borderRadius: '8px', maxWidth: '80%', fontSize: '0.875rem', border: m.role === 'assistant' ? '1px solid #ddd' : 'none' }}>
                                 {m.role === 'assistant' ? (
                                     <div className="markdown-body" style={{ display: 'flex', flexDirection: 'column', gap: '6px', margin: 0 }}>
-                                        <ReactMarkdown>{m.content}</ReactMarkdown>
+                                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{m.content}</ReactMarkdown>
                                     </div>
                                 ) : (
                                     m.content
